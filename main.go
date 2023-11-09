@@ -1,37 +1,27 @@
 package main
 
 import (
-	// "fmt"
+	"flag"
 	"time"
 
-	"github.com/google/gopacket"
-	"github.com/google/gopacket/pcap"
-	"github.com/mmeow0/packet-collector/packets"
-
-	log "github.com/sirupsen/logrus"
+	"github.com/mmeow0/packet-collector/collector"
+	"github.com/mmeow0/packet-collector/models"
+	"github.com/mmeow0/packet-collector/sendData"
 )
 
-var (
-	device      string = "en0"
-	snapshotLen int32  = 1024
-	promiscuous bool   = false
-	err         error
-	timeout     time.Duration = 30 * time.Second
-	handle      *pcap.Handle
+const (
+	snapshotLen int32         = 1024
+	promiscuous bool          = false
+	timeout     time.Duration = 5 * time.Second
 )
 
 func main() {
-	// Open device
-	handle, err = pcap.OpenLive(device, snapshotLen, promiscuous, timeout)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer handle.Close()
+	var device string
 
-	packetSource := gopacket.NewPacketSource(handle, handle.LinkType())
+	flag.StringVar(&device, "interface", "en0", "network interface to collect")
 
-	for packet := range packetSource.Packets() {
-		// packets.LogPacketInfo(packet)
-		packets.DecodePacket(packet)
-	}
+	packets := make(chan models.Packet, 100)
+	go sendData.SendData(packets)
+	go collector.Collector(device, snapshotLen, promiscuous, timeout, packets)
+	select {}
 }
