@@ -7,18 +7,6 @@ import (
 	"github.com/google/gopacket/layers"
 )
 
-type Layers struct {
-	Ethernet bool `json:"ethernet"`
-	Arp      bool `json:"arp"`
-	ICMPv4   bool `json:"icmp4"`
-	ICMPv6   bool `json:"icmp6"`
-	IPv4     bool `json:"ip4"`
-	IPv6     bool `json:"ip6"`
-	TCP      bool `json:"tcp"`
-	UDP      bool `json:"udp"`
-	TLS      bool `json:"tls"`
-}
-
 type Ethernet struct {
 	EthernetType layers.EthernetType `json:"ethernetType"`
 	SrcMAC       net.HardwareAddr    `json:"srcMac"`
@@ -76,14 +64,9 @@ type UDP struct {
 	Length           uint16 `json:"length"`
 }
 
-type TLS struct {
-	Handshake []layers.TLSHandshakeRecord `json:"handshake"`
-}
-
 type Packet struct {
 	Timestamp     time.Time `json:"timestamp"`
 	Length        int       `json:"length"`
-	Layers        `json:"layers,omitempty"`
 	*Ethernet     `json:"ethernet,omitempty"`
 	*Arp          `json:"arp,omitempty"`
 	*ICMPv4       `json:"icmp4,omitempty"`
@@ -92,7 +75,6 @@ type Packet struct {
 	*IPv6         `json:"ip6,omitempty"`
 	*TCP          `json:"tcp,omitempty"`
 	*UDP          `json:"udp,omitempty"`
-	*TLS          `json:"tls,omitempty"`
 	Payload       string `json:"payload"`
 	DecodingError bool   `json:"decodingError"`
 }

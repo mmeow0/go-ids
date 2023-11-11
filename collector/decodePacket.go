@@ -6,7 +6,7 @@ import (
 	"github.com/mmeow0/packet-collector/models"
 )
 
-func DecodePacket(packet gopacket.Packet) models.Packet {
+func decodePacket(packet gopacket.Packet) models.Packet {
 	var eth layers.Ethernet
 	var arp layers.ARP
 
@@ -22,15 +22,13 @@ func DecodePacket(packet gopacket.Packet) models.Packet {
 	var tcp layers.TCP
 	var udp layers.UDP
 
-	var tls layers.TLS
-
 	decodedPacket := models.Packet{
 		Timestamp:     packet.Metadata().Timestamp,
 		Length:        packet.Metadata().Length,
 		Payload:       "",
 		DecodingError: false}
 
-	parser := gopacket.NewDecodingLayerParser(layers.LayerTypeEthernet, &eth, &arp, &icmp4, &icmp6, &ip4, &ip6, &tcp, &udp, &tls)
+	parser := gopacket.NewDecodingLayerParser(layers.LayerTypeEthernet, &eth, &arp, &icmp4, &icmp6, &ip4, &ip6, &tcp, &udp)
 
 	decodedLayers := make([]gopacket.LayerType, 0, 10)
 
@@ -39,7 +37,6 @@ func DecodePacket(packet gopacket.Packet) models.Packet {
 		switch typ {
 		case layers.LayerTypeEthernet:
 			// Ethernet type is typically IPv4 but could be ARP or other
-			decodedPacket.Layers.Ethernet = true
 			decodedPacket.Ethernet = &models.Ethernet{
 				EthernetType: eth.EthernetType,
 				SrcMAC:       eth.SrcMAC,
@@ -48,7 +45,6 @@ func DecodePacket(packet gopacket.Packet) models.Packet {
 			}
 
 		case layers.LayerTypeARP:
-			decodedPacket.Layers.Arp = true
 			decodedPacket.Arp = &models.Arp{
 				Operation:         arp.Operation,
 				Protocol:          arp.Protocol,
@@ -59,7 +55,6 @@ func DecodePacket(packet gopacket.Packet) models.Packet {
 			}
 
 		case layers.LayerTypeICMPv4:
-			decodedPacket.Layers.ICMPv4 = true
 			decodedPacket.ICMPv4 = &models.ICMPv4{
 				TypeCode: icmp4.TypeCode,
 				Checksum: icmp4.Checksum,
@@ -68,14 +63,12 @@ func DecodePacket(packet gopacket.Packet) models.Packet {
 			}
 
 		case layers.LayerTypeICMPv6:
-			decodedPacket.Layers.ICMPv6 = true
 			decodedPacket.ICMPv6 = &models.ICMPv6{
 				TypeCode: icmp6.TypeCode,
 				Checksum: icmp6.Checksum,
 			}
 
 		case layers.LayerTypeIPv4:
-			decodedPacket.Layers.IPv4 = true
 			decodedPacket.IPv4 = &models.IPv4{
 				Id:       ip4.Id,
 				Length:   ip4.Length,
@@ -86,7 +79,6 @@ func DecodePacket(packet gopacket.Packet) models.Packet {
 			}
 
 		case layers.LayerTypeIPv6:
-			decodedPacket.Layers.IPv6 = true
 			decodedPacket.IPv6 = &models.IPv6{
 				Length:   ip6.Length,
 				HopLimit: ip6.HopLimit,
@@ -95,7 +87,6 @@ func DecodePacket(packet gopacket.Packet) models.Packet {
 			}
 
 		case layers.LayerTypeTCP:
-			decodedPacket.Layers.TCP = true
 			decodedPacket.TCP = &models.TCP{
 				SrcPort:  tcp.SrcPort,
 				DstPort:  tcp.DstPort,
@@ -104,18 +95,11 @@ func DecodePacket(packet gopacket.Packet) models.Packet {
 			}
 
 		case layers.LayerTypeUDP:
-			decodedPacket.Layers.UDP = true
 			decodedPacket.UDP = &models.UDP{
 				SrcPort:  udp.SrcPort,
 				DstPort:  udp.DstPort,
 				Checksum: udp.Checksum,
 				Length:   udp.Length,
-			}
-
-		case layers.LayerTypeTLS:
-			decodedPacket.Layers.TLS = true
-			decodedPacket.TLS = &models.TLS{
-				Handshake: tls.Handshake,
 			}
 		}
 	}

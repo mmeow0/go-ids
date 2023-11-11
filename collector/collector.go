@@ -31,7 +31,7 @@ func Collector(device string,
 	packetSource := gopacket.NewPacketSource(handle, handle.LinkType())
 
 	for packet := range packetSource.Packets() {
-		packets <- DecodePacket(packet)
+		packets <- decodePacket(packet)
 	}
 
 }
