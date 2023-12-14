@@ -28,8 +28,7 @@ func SendData(packets chan models.Packet) {
 				continue
 			}
 
-			_, _ = con.Write([]byte(flat))
-			log.Infoln(string(flat))
+			con.Write([]byte(flat))
 		}
 	}
 }

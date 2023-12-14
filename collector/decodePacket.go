@@ -107,6 +107,8 @@ func decodePacket(packet gopacket.Packet) models.Packet {
 	applicationLayer := packet.ApplicationLayer()
 	if applicationLayer != nil {
 		decodedPacket.Payload = string(applicationLayer.Payload())
+		rule := []string{"rule test : tag1 { meta: author = \"Hilko Bengen\" strings: $a = \"abc\" fullword condition: $a }"}
+		Scan(rule, []string{"Hilko Bengen abc"})
 	}
 
 	// Check for errors

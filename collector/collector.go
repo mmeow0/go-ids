@@ -15,8 +15,6 @@ func Collector(device string,
 	timeout time.Duration,
 	packets chan models.Packet,
 ) {
-	log.Infoln("Packets collector starting...")
-
 	// Open device
 	handle, err := pcap.OpenLive(device, snapshotLen, promiscuous, timeout)
 	if err != nil {

@@ -59,9 +59,10 @@ type TCP struct {
 }
 
 type UDP struct {
-	SrcPort, DstPort layers.UDPPort
-	Checksum         uint16 `json:"checksum"`
-	Length           uint16 `json:"length"`
+	SrcPort  layers.UDPPort `json:"srcPort"`
+	DstPort  layers.UDPPort `json:"dstPort"`
+	Checksum uint16         `json:"checksum"`
+	Length   uint16         `json:"length"`
 }
 
 type Packet struct {
