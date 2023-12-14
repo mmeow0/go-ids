@@ -66,16 +66,14 @@ type UDP struct {
 }
 
 type Packet struct {
-	Timestamp     time.Time `json:"timestamp"`
-	Length        int       `json:"length"`
-	*Ethernet     `json:"ethernet,omitempty"`
-	*Arp          `json:"arp,omitempty"`
-	*ICMPv4       `json:"icmp4,omitempty"`
-	*ICMPv6       `json:"icmp6,omitempty"`
-	*IPv4         `json:"ip4,omitempty"`
-	*IPv6         `json:"ip6,omitempty"`
-	*TCP          `json:"tcp,omitempty"`
-	*UDP          `json:"udp,omitempty"`
-	Payload       string `json:"payload"`
-	DecodingError bool   `json:"decodingError"`
+	Timestamp    time.Time        `json:"timestamp"`
+	Length       int              `json:"length"`
+	SrcMAC       net.HardwareAddr `json:"srcMac"`
+	DstMAC       net.HardwareAddr `json:"dstMac"`
+	SrcIP        net.IP           `json:"srcIp"`
+	DstIP        net.IP           `json:"dstIp"`
+	SrcPort      layers.TCPPort   `json:"srcPort"`
+	DstPort      layers.TCPPort   `json:"dstPort"`
+	Payload      string           `json:"payload"`
+	MatchedRules []string         `json:"matchedRules"`
 }

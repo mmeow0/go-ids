@@ -8,8 +8,8 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-func SendData(packets chan models.Packet) {
-	con, err := net.Dial("tcp", "localhost:9988")
+func SendData(matchedPackets chan models.Packet, address string) {
+	con, err := net.Dial("tcp", address)
 
 	if err != nil {
 		log.Warn("failed to connect socket")
@@ -18,7 +18,7 @@ func SendData(packets chan models.Packet) {
 	defer con.Close()
 
 	for {
-		for packet := range packets {
+		for packet := range matchedPackets {
 			flat, err := json.Marshal(packet)
 			if err != nil {
 				log.WithFields(log.Fields{
