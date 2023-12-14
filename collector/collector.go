@@ -10,7 +10,8 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-func Collector(device string,
+func Collector(
+	device string,
 	snapshotLen int32,
 	promiscuous bool,
 	timeout time.Duration,
@@ -50,8 +51,6 @@ func Collector(device string,
 
 			if len(m) != 0 {
 				packet := decodePacket(packet)
-				log.Infof("Founded rules for %s...", payload)
-
 				var matchedRules []string
 				for _, match := range m {
 					matchedRules = append(matchedRules, match.Rule)

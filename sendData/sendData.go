@@ -28,7 +28,7 @@ func SendData(matchedPackets chan models.Packet, address string) {
 				continue
 			}
 
-			con.Write([]byte(flat))
+			con.Write(flat)
 		}
 	}
 }
