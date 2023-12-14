@@ -8,9 +8,9 @@ import (
 	"time"
 
 	"github.com/hillu/go-yara/v4"
-	"github.com/mmeow0/packet-collector/collector"
-	"github.com/mmeow0/packet-collector/models"
-	"github.com/mmeow0/packet-collector/sendData"
+	"github.com/mmeow0/go-sensor/collector"
+	"github.com/mmeow0/go-sensor/models"
+	"github.com/mmeow0/go-sensor/sendData"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -22,9 +22,9 @@ const (
 
 func main() {
 	var (
-		device    string
+		device        string
 		rulesFileName string
-		address   string
+		address       string
 	)
 
 	flag.StringVar(&device, "i", "en0", "network interface")

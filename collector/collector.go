@@ -6,7 +6,7 @@ import (
 	"github.com/google/gopacket"
 	"github.com/google/gopacket/pcap"
 	"github.com/hillu/go-yara/v4"
-	"github.com/mmeow0/packet-collector/models"
+	"github.com/mmeow0/go-sensor/models"
 	log "github.com/sirupsen/logrus"
 )
 

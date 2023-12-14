@@ -3,7 +3,7 @@ package collector
 import (
 	"github.com/google/gopacket"
 	"github.com/google/gopacket/layers"
-	"github.com/mmeow0/packet-collector/models"
+	"github.com/mmeow0/go-sensor/models"
 )
 
 func decodePacket(packet gopacket.Packet) models.Packet {

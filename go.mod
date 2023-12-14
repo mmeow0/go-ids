@@ -1,4 +1,4 @@
-module github.com/mmeow0/packet-collector
+module github.com/mmeow0/go-sensor
 
 go 1.21.3
 

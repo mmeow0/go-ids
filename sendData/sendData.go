@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net"
 
-	"github.com/mmeow0/packet-collector/models"
+	"github.com/mmeow0/go-sensor/models"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -12,7 +12,7 @@ func SendData(matchedPackets chan models.Packet, address string) {
 	con, err := net.Dial("tcp", address)
 
 	if err != nil {
-		log.Warn("failed to connect socket")
+		log.Fatal("failed to connect socket")
 		return
 	}
 	defer con.Close()
