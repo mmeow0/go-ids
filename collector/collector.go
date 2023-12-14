@@ -38,22 +38,28 @@ func Collector(device string,
 	s, _ := yara.NewScanner(r)
 
 	for packet := range packetSource.Packets() {
-		packet := decodePacket(packet)
+		payload := ""
+		applicationLayer := packet.ApplicationLayer()
+		if applicationLayer != nil {
+			payload = string(applicationLayer.Payload())
+		}
 
-		payload := packet.Payload
-		var m yara.MatchRules
-		s.SetCallback(&m).ScanMem([]byte(payload))
+		if payload != "" {
+			var m yara.MatchRules
+			s.SetCallback(&m).ScanMem([]byte(payload))
 
-		if len(m) != 0 {
-			log.Infof("Founded rules for %s...", payload)
+			if len(m) != 0 {
+				packet := decodePacket(packet)
+				log.Infof("Founded rules for %s...", payload)
 
-			var matchedRules []string
-			for _, match := range m {
-				matchedRules = append(matchedRules, match.Rule)
+				var matchedRules []string
+				for _, match := range m {
+					matchedRules = append(matchedRules, match.Rule)
+				}
+				packet.MatchedRules = matchedRules
+
+				packets <- packet
 			}
-			packet.MatchedRules = matchedRules
-
-			packets <- packet
 		}
 	}
 }

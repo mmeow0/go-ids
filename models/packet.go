@@ -74,6 +74,5 @@ type Packet struct {
 	DstIP        net.IP           `json:"dstIp"`
 	SrcPort      layers.TCPPort   `json:"srcPort"`
 	DstPort      layers.TCPPort   `json:"dstPort"`
-	Payload      string           `json:"payload"`
 	MatchedRules []string         `json:"matchedRules"`
 }

@@ -24,8 +24,7 @@ func decodePacket(packet gopacket.Packet) models.Packet {
 
 	decodedPacket := models.Packet{
 		Timestamp: packet.Metadata().Timestamp,
-		Length:    packet.Metadata().Length,
-		Payload:   ""}
+		Length:    packet.Metadata().Length}
 
 	parser := gopacket.NewDecodingLayerParser(layers.LayerTypeEthernet, &eth, &arp, &icmp4, &icmp6, &ip4, &ip6, &tcp, &udp)
 
@@ -55,11 +54,6 @@ func decodePacket(packet gopacket.Packet) models.Packet {
 			decodedPacket.SrcPort = layers.TCPPort(udp.SrcPort)
 			decodedPacket.DstPort = layers.TCPPort(udp.DstPort)
 		}
-	}
-
-	applicationLayer := packet.ApplicationLayer()
-	if applicationLayer != nil {
-		decodedPacket.Payload = string(applicationLayer.Payload())
 	}
 
 	return decodedPacket
