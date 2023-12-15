@@ -28,7 +28,10 @@ func SendData(matchedPackets chan models.Packet, address string) {
 				continue
 			}
 
-			con.Write(flat)
+			log.Infoln("Send", string(flat))
+
+			data := append(flat, []byte("uPMf1gZsTwt2TNh\n")...)
+			con.Write(data)
 		}
 	}
 }
